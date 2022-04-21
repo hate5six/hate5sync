@@ -1,0 +1,6 @@
+easygui==0.98.3
+ffmpeg==1.4
+ffmpeg_python==0.2.0
+librosa==0.9.1
+numpy==1.21.2
+opencv_python==4.5.5.62
