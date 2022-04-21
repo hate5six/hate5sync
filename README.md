@@ -13,7 +13,16 @@ The following dependencies are required:
   <li><a href="https://github.com/kkroening/ffmpeg-python" target="_blank">ffmpeg</a> </li>
   <li><a href="https://numpy.org/" target="_blank">numpy</a> </li>
   <li><a href="http://easygui.sourceforge.net/" target="_blank">easygui</a> </li>
-  </ul> 
+</ul> 
+
+Or you can just use the requirements.txt file
+```
+pip install -r requirements.txt
+```
+or
+```
+conda create --name <env_name> --file requirements.txt
+```
 
 <h2>How it works:</h2>
 The algorithm is literally so stupid. <br><br>
