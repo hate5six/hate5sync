@@ -4,7 +4,7 @@
 
 hate5sync is a dumb algorithm used to calculate the necessary offset for syncing separate audio/video sources in OBS. Play slate.mp4 on a device (ie your phone) pointed at the camera and microphone and record it within OBS. Let's call that recorded file <b>claptest.mp4</b>. For best results, cover the entire camera lens with the phone and minimize background noise. Run this script on claptest.mp4 and it will calculate the offset between the visual and acoustic peaks. Enter that value into the OBS "sync offset" field and you're done.
 
-<h1>Installation:</h1>
+<h2>Installation:</h2>
 
 The following dependencies are required:
 <ul>
@@ -23,6 +23,19 @@ or
 ```
 conda create --name <env_name> --file requirements.txt
 ```
+<h2>Running hate5sync:</h2>
+
+You can run hate5sync by pointing it to the recorded video:
+```
+python hate5sync.py --infile path_to_recorded_video
+```
+Alternatively, if you are recording videos with OBS (as shown in the demo), you can just point hate5sync to the default OBS video recording directory and it will automatically read the most recent file:
+```
+python hate5sync.py --dir path_to_OBS_video_directory
+```
+
+Personally I save the latter line to a file called <b>hate5sync.bat</b> and assign to a button via StreamDeck:<br><br>
+![Alt text](demo/streamdeck.png?raw=true "streamdeck")
 
 <h2>How it works:</h2>
 The algorithm is literally so stupid. <br><br>
