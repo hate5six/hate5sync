@@ -1,5 +1,7 @@
 # hate5sync
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/fbshqualaJc/0.jpg)](https://www.youtube.com/watch?v=fbshqualaJc)
+
 hate5sync is a dumb algorithm used to calculate the necessary offset for syncing separate audio/video sources in OBS. Play slate.mp4 on a device (ie your phone) pointed at the camera and microphone and record it within OBS. Let's call that recorded file <b>claptest.mp4</b>. For best results, cover the entire camera lens with the phone and minimize background noise. Run this script on claptest.mp4 and it will calculate the offset between the visual and acoustic peaks. Enter that value into the OBS "sync offset" field and you're done.
 
 <h1>Installation:</h1>
