@@ -76,5 +76,10 @@ if __name__ == '__main__':
 	peak_audio = compute_audio_peak(video_file, fps)
 
 	# find the difference in audio/video peaks and convert to milliseconds
-	delay = 1000*(max(peak_audio, peak_video) - min(peak_video, peak_audio))/fps
-	easygui.msgbox("%s millisecond delay" % str(delay))
+	delay = 1000*(peak_video - peak_audio)/fps
+	if delay > 0:
+		easygui.msgbox("Audio is ahead. Delay it by %.2f milliseconds" % delay)
+	elif delay < 0:
+		easygui.msgbox("Video is ahead. Delay it by %.2f milliseconds" % abs(delay))
+	else:
+		easygui.msgbox("No sync offset needed.")
