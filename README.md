@@ -46,7 +46,15 @@ options:
   --pw PW          OBS websocket password
   --src SRC        OBS source name to be offset
   ```
-You can use --infile to pass in the video file recorded in OBS. If a file is not passed in the app will take the most recent file specified in --dir. If --dir is not set it will retrieve the default OBS recording directory. If you are not using the default host/port/password for OBS websockets, use the corresponding options to override the defaults. --src should be the name of source in OBS that needs the offset applied. If this option is not set you will be presented with a dialog box asking you to choose.
+<ul>
+  <li> Use --infile to pass in the video file recorded in OBS.</li>
+  <li> or use --dir to pass in the video recording directory and the most recent file will be used.</li>
+  <li> or if neither --infile or --dir are set the app will retrieve the default OBS recording directory.</li>
+  <li> If you are not using the default host/port/password for OBS websockets, use the corresponding options to override the defaults.</li>
+  <li> Use --src to specify the name of source in OBS that needs the offset applied. If this option is not set you will be presented with a dialog box asking you to choose.</li>
+</ul>
+
+![src_list](https://user-images.githubusercontent.com/3986906/164947302-23d8d1bb-7b00-4ae8-b7f7-d918ad0da094.png)
 
 For example, running
 ```
@@ -66,7 +74,7 @@ First it loads claptest.mp4
 video_stream = cv2.VideoCapture(video_file)
 fps = video_stream.get(cv2.CAP_PROP_FPS)
 ```  
-Then it loops over the video frame by frame. We use open-cv to convert each frame to the LAB colorspace. All we care about the L channel, which captures lightness (intensity). L ends up being a matrix the size of the video frame (1920x1080). Then we compute the average value of that normalized matrix to get the average brightness of that image. Store that in a list called <b>brightness</b> and repeat the process on the next frame.
+Then it loops over the video frame by frame. We use open-cv to convert each frame to the LAB colorspace. All we care about the L channel, which captures lightness (intensity). L ends up being a matrix the size of the video frame (1920x1080). Then we compute the mean value of that matrix to get the average brightness of that image. Store that in a list called <b>brightness</b> and repeat the process on the next frame.
 ```
 success,image = video_stream.read()
 brightness = []
@@ -112,4 +120,9 @@ Finally, we take the difference between the peaks (as frames), divide it by the 
 delay = (peak_video - peak_audio)/fps
 ```
 <br>
-That delay is then automatically applied to the specified source in OBS.
+That delay is then automatically applied to the specified source in OBS.<br><br>
+Ways you can support my work:
+<ul>
+  <li><a href="https://patreon.com/hate5six" target="blank">Support me on Patreon</a></li>
+  <li><a href="https://hate5six.com/donate" target="blank">One time donations</a></li>
+</ul> 
