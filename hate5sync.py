@@ -91,7 +91,7 @@ if __name__ == '__main__':
 			rec_folder = folder.getRecFolder()
 
 		# get the most recent video file from the dir
-		list_of_files = glob.glob(os.path.join(args.dir, "*")) 
+		list_of_files = glob.glob(os.path.join(rec_folder, "*")) 
 		video_file = max(list_of_files, key=os.path.getctime)
 
 	# if OBS source name is set, use it
