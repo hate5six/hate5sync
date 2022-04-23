@@ -1,6 +1,7 @@
-easygui==0.98.3
-ffmpeg==1.4
-ffmpeg_python==0.2.0
-librosa==0.9.1
-numpy==1.21.2
-opencv_python==4.5.5.62
+numpy==1.22.3
+easygui=0.98.1=py310h5588dad_3
+ffmpeg=4.3.1=ha925a31_0
+ffmpeg-python=0.2.0=py_0
+librosa=0.9.1=pyhd8ed1ab_0
+obs-websocket-py=0.5.3=pypi_0
+opencv=4.5.4=py310hc26a207_3
