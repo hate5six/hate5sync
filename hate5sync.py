@@ -6,6 +6,14 @@ import ffmpeg
 import numpy as np
 import easygui
 import argparse
+import sys
+import time
+
+import logging
+logging.basicConfig(level=logging.INFO)
+
+sys.path.append('../')
+from obswebsocket import obsws, requests  # noqa: E402
 
 def compute_video_peak(video_file):
 	"""Detect when the sync video flashes."""
@@ -24,21 +32,15 @@ def compute_video_peak(video_file):
 		# split image to LAB colorspace. L captures lightness (intensity)
 		L, A, B = cv2.split(cv2.cvtColor(image, cv2.COLOR_BGR2LAB))
 
-		# normalize L channel to be between 0-1
-		L_norm = L/np.max(L)
-
 		# compute the average brightness of the normalized L channel
-		L_mean = np.mean(L_norm)
+		L_mean = np.mean(L)
 
 		# store the average brightness and read the next video frame
 		brightness.append(L_mean)
 		success,image= video_stream.read()
 	
-	# compute successive brightness difference between consecutive frames
-	pairs_bright = list(((b-a) for a,b in zip(brightness, brightness[1:])))
-
-	# find the frame consisting the biggest change in brightness
-	peak_video = np.argmin(pairs_bright)
+	# find the brightest frame
+	peak_video = np.argmax(brightness)
 
 	return (fps, peak_video)
 
@@ -61,25 +63,61 @@ def compute_audio_peak(video_file, fps):
 	return peak_audio
 	
 if __name__ == '__main__':
+
 	parser = argparse.ArgumentParser(description='hate5sync')
 	parser.add_argument('--infile', help="path to file")
 	parser.add_argument('--dir', help="path to directory")
+	parser.add_argument('--host', default="localhost", help="OBS websocket host")
+	parser.add_argument('--port', type=int, default=4444, help="OBS websocket port")
+	parser.add_argument('--pw', default="secret", help="OBS websocket password")
+	parser.add_argument('--src', help="OBS source name to be offset")
 	args = parser.parse_args()
 
+	# connect to OBS websocket
+	ws = obsws(args.host, args.port, args.pw)
+	ws.connect()
+
+	# if recorded file is passed in, use it
 	if args.infile:
 		video_file = args.infile
-	elif args.dir:
-		list_of_files = glob.glob(os.path.join(args.dir, "*")) 
+	else:
+		# if recording dir is passed in, use it
+		if args.dir:
+			rec_folder = args.dir
+
+		# otherwise get the recording dir from OBS
+		else:
+			folder = ws.call(requests.GetRecordingFolder())
+			rec_folder = folder.getRecFolder()
+
+		# get the most recent video file from the dir
+		list_of_files = glob.glob(os.path.join(rec_folder, "*")) 
 		video_file = max(list_of_files, key=os.path.getctime)
-	
+
+	# if OBS source name is set, use it
+	if args.src:
+		src = args.src
+
+	# else prompt the user to choose the source to be offset
+	else:
+		msg = "Choose the OBS Source to be offset"
+		title = "OBS Source List"
+		source_list = ws.call(requests.GetSourcesList())
+		sources = [s['name'] for s in source_list.getSources()]
+		src = easygui.choicebox(msg, title, sources)
+
+	# compute the video peak
 	(fps, peak_video) = compute_video_peak(video_file)
+
+	# compute the audio peak
 	peak_audio = compute_audio_peak(video_file, fps)
 
-	# find the difference in audio/video peaks and convert to milliseconds
-	delay = 1000*(peak_video - peak_audio)/fps
-	if delay > 0:
-		easygui.msgbox("Audio is ahead. Delay it by %.2f milliseconds" % delay)
-	elif delay < 0:
-		easygui.msgbox("Video is ahead. Delay it by %.2f milliseconds" % abs(delay))
-	else:
-		easygui.msgbox("No sync offset needed.")
+	# find the difference in seconds between audio/video peaks
+	delay = (peak_video - peak_audio)/fps
+
+	# automatically update the source to the computed delay (in nanoseconds)
+	ws.call(requests.SetSyncOffset(src, delay*1000000000))
+	easygui.msgbox("A delay of %.2f ms has been applied to %s" % (delay*1000, src))
+
+	# disconnect from websocket
+	ws.disconnect()
