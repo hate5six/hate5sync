@@ -63,7 +63,7 @@ For example, running
 python -i hate5sync.py --pw password --src "Mic/Aux"
 ```
 
-Will retrieve the latest file recorded in OBS using, compute the delay, then automatically set the offset to the Mic/Aux source.
+will retrieve the latest file recorded in OBS using the default directory, compute the delay, then automatically set the offset to the Mic/Aux source.
 
 Personally I save the latter line to a file called <b>hate5sync.bat</b> and assign to a button via StreamDeck:<br><br>
 ![Alt text](demo/streamdeck.png?raw=true "streamdeck")
