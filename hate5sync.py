@@ -32,7 +32,7 @@ def compute_video_peak(video_file):
 		# split image to LAB colorspace. L captures lightness (intensity)
 		L, A, B = cv2.split(cv2.cvtColor(image, cv2.COLOR_BGR2LAB))
 
-		# compute the average brightness of the normalized L channel
+		# compute the average brightness of the L channel
 		L_mean = np.mean(L)
 
 		# store the average brightness and read the next video frame
