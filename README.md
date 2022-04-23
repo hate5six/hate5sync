@@ -31,6 +31,8 @@ The latest version of the app automatically updates the sync offset field throug
 
 <h2>Running hate5sync:</h2>
 
+<b>OBS must be running first (with websockets enabled) before running hate5sync.</b>
+
 You can run hate5sync with the following arguments:
 ```
 usage: hate5sync.py [-h] [--infile INFILE] [--dir DIR] [--host HOST] [--port PORT] [--pw PW] [--src SRC]
