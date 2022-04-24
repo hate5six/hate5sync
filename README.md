@@ -27,7 +27,11 @@ or
 conda create --name <env_name> --file requirements.txt
 ```
 
-The latest version of the app automatically updates the sync offset field through OBS websockets. You will need to download OBS websockets from the link above and follow the installation instructions carefully. With OBS running, you can now run hate5sync and it will communicate directly with OBS.
+The latest version of the app automatically updates the sync offset field through OBS websockets. You will need to download OBS websockets from the link above and follow the installation instructions carefully. With OBS running, you can now run hate5sync and it will communicate directly with OBS. If you've installed it correctly, you should see this when you reboot OBS or by going to Tools>Websockets Server Settings.
+
+![obs_ws](https://user-images.githubusercontent.com/3986906/164997333-d14fd730-2e07-467e-9189-6f43d52a882b.png)
+
+You can leave the defaults but changing the password is recommended.
 
 <h2>Running hate5sync:</h2>
 
