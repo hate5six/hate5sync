@@ -5,3 +5,5 @@ ffmpeg-python=0.2.0=py_0
 librosa=0.9.1=pyhd8ed1ab_0
 obs-websocket-py=0.5.3=pypi_0
 opencv=4.5.4=py310hc26a207_3
+matplotlib==3.4.3
+matplotlib-inline==0.1.3

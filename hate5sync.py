@@ -8,6 +8,7 @@ import easygui
 import argparse
 import sys
 import time
+from matplotlib import pyplot as plt
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -42,7 +43,7 @@ def compute_video_peak(video_file):
 	# find the brightest frame
 	peak_video = np.argmax(brightness)
 
-	return (fps, peak_video)
+	return (fps, brightness, peak_video)
 
 def compute_audio_peak(video_file, fps):
 	"""Detect when the sync video bleeps."""
@@ -71,6 +72,7 @@ if __name__ == '__main__':
 	parser.add_argument('--port', type=int, default=4444, help="OBS websocket port")
 	parser.add_argument('--pw', default="secret", help="OBS websocket password")
 	parser.add_argument('--src', help="OBS source name to be offset")
+	parser.add_argument('--debugger', action=argparse.BooleanOptionalAction, default=False, help="Debug mode to display relative peaks")
 	args = parser.parse_args()
 
 	# connect to OBS websocket
@@ -104,10 +106,11 @@ if __name__ == '__main__':
 		title = "OBS Source List"
 		source_list = ws.call(requests.GetSourcesList())
 		sources = [s['name'] for s in source_list.getSources()]
-		src = easygui.choicebox(msg, title, sources)
+		if not args.debugger:
+			src = easygui.choicebox(msg, title, sources)
 
 	# compute the video peak
-	(fps, peak_video) = compute_video_peak(video_file)
+	(fps, brightness, peak_video) = compute_video_peak(video_file)
 
 	# compute the audio peak
 	peak_audio = compute_audio_peak(video_file, fps)
@@ -115,9 +118,18 @@ if __name__ == '__main__':
 	# find the difference in seconds between audio/video peaks
 	delay = (peak_video - peak_audio)/fps
 
-	# automatically update the source to the computed delay (in nanoseconds)
-	ws.call(requests.SetSyncOffset(src, delay*1000000000))
-	easygui.msgbox("A delay of %.2f ms has been applied to %s" % (delay*1000, src))
+	if not args.debugger:
+		# automatically update the source to the computed delay (in nanoseconds)
+		ws.call(requests.SetSyncOffset(src, delay*1000000000))
+		easygui.msgbox("A delay of %.2f ms has been applied to %s" % (delay*1000, src))
+	
+	# in debug mode, display peaks
+	else:
+		plt.plot(brightness, label="brightness")
+		plt.axvline(peak_audio, label="peak amplitude", c='r')
+		plt.title("Computed delay: %.2f\nmax=%s(V) %s(A)" % ((delay*1000), peak_video, peak_audio))
+		plt.legend()
+		plt.show()
 
 	# disconnect from websocket
 	ws.disconnect()
