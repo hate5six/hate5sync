@@ -15,7 +15,8 @@ The following dependencies are required:
   <li><a href="http://easygui.sourceforge.net/" target="_blank">easygui</a> </li>
   <li><a href="https://github.com/obsproject/obs-websocket" target="_blank">obs-websocket server</a> </li>
   <li><a href="https://github.com/Elektordi/obs-websocket-py" target="_blank">obs-websocket Python library</a> </li>
-  
+  <li><a href="https://matplotlib.org/" target="_blank">matplotlib (for debug mode)</a> </li>
+    
 </ul> 
 
 Or you can just use the requirements.txt file
