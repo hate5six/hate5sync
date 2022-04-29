@@ -51,6 +51,8 @@ options:
   --port PORT      OBS websocket port
   --pw PW          OBS websocket password
   --src SRC        OBS source name to be offset
+  --debugger, --no-debugger
+                        Debug mode to display relative peaks (default: False)
   ```
 <ul>
   <li> Use --infile to pass in the video file recorded in OBS.</li>
@@ -58,6 +60,7 @@ options:
   <li> or if neither --infile or --dir are set the app will retrieve the default OBS recording directory.</li>
   <li> If you are not using the default host/port/password for OBS websockets, use the corresponding options to override the defaults.</li>
   <li> Use --src to specify the name of source in OBS that needs the offset applied. If this option is not set you will be presented with a dialog box asking you to choose.</li>
+  <li> --debugger will display a plot of the brightness and peak audio to help analyze faulty sync attempts. No changes will be applied to OBS in this mode.</li>
 </ul>
 
 ![src_list](https://user-images.githubusercontent.com/3986906/164947302-23d8d1bb-7b00-4ae8-b7f7-d918ad0da094.png)
